@@ -1,0 +1,93 @@
+package database;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import entita.Cliente;
+import entita.Insegna;
+import entita.Lavoratore;
+import entita.Tappeto;
+
+public class MysqlUpdate {
+
+	static Query q = new Query();
+	
+	public static void aggiornaLavoratore(Lavoratore l) {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.UPDATE_LAVORATORE);) {
+			Class.forName(q.DRIVER);
+			
+			pstmt.setFloat(1, Float.parseFloat(l.getStipendio()));
+			pstmt.setString(2, l.getPassword());
+			pstmt.setInt(3, Integer.valueOf(l.getCodiceLavoratore()));
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	public static void aggiornaCliente(Cliente c) {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.UPDATE_CLIENTE);) {
+			
+			Class.forName(q.DRIVER);
+			
+			pstmt.setString(1, c.getNumeroTelefono());
+			pstmt.setString(2, c.getEmail());
+			pstmt.setInt(3, Integer.valueOf(c.getCodiceCliente()));
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	public static void aggiornaInsegna(Insegna i, Boolean stato) {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.UPDATE_INSEGNA);) {
+			
+			Class.forName(q.DRIVER);
+			
+			pstmt.setString(1, i.getStato());
+			if(stato == true) {
+				pstmt.setString(2, i.getDataCompletamento());
+			} else {
+				pstmt.setString(3, i.getDataCompletamento());
+			}
+			pstmt.setInt(4, Integer.valueOf(i.getCodiceInsegna()));
+			
+			
+			pstmt.setInt(1, Integer.valueOf(i.getCodiceInsegna()));
+			pstmt.setString(2, i.getStato());
+			pstmt.setInt(3, Integer.valueOf(i.getQuantita()));
+			pstmt.setFloat(4, Float.parseFloat(i.getAltezza()));
+			pstmt.setFloat(5, Float.parseFloat(i.getLarghezza()));
+			pstmt.setString(6, i.getDataCompletamento());
+			pstmt.setFloat(7, Float.parseFloat(i.getLunghezzaNeon()));
+			pstmt.setInt(8, Integer.valueOf(i.getNumeroLed()));
+			pstmt.setFloat(9, Float.parseFloat(i.getPrezzo()));
+			pstmt.setInt(10, Integer.valueOf(i.getCodiceOrdine()));
+			pstmt.setInt(11, Integer.valueOf(i.getCodiceLavoratore()));
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	public static void aggiornaTappeto(Tappeto t, Boolean stato) {
+		
+	}
+}

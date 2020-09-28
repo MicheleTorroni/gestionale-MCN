@@ -1,0 +1,53 @@
+package database;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import entita.Cliente;
+import entita.Insegna;
+import entita.Lavoratore;
+import entita.Tappeto;
+
+public class MysqlUpdate {
+
+	static Query q = new Query();
+	
+	public static void aggiornaLavoratore(Lavoratore l) {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.UPDATE_LAVORATORE);) {
+			Class.forName(q.DRIVER);
+			
+			pstmt.setString(1, Integer.valueOf(l.getCodiceLavoratore()));
+			pstmt.setString(2, l.getCodiceFiscale());
+			pstmt.setFloat(3, Float.parseFloat(l.getStipendio()));
+			pstmt.setString(4, l.getNome());
+			pstmt.setString(5, l.getCognome());
+			pstmt.setString(6, l.getDataNascita());
+			pstmt.setString(7, l.getTipologiaLavoratore());
+			pstmt.setString(8, l.getPassword());
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	public static void aggiornaCliente(Cliente c) {
+		
+	}
+
+	public static void aggiornaInsegna(Insegna i, Boolean stato) {
+		
+	}
+
+	public static void aggiornaTappeto(Tappeto t, Boolean stato) {
+		
+	}
+}

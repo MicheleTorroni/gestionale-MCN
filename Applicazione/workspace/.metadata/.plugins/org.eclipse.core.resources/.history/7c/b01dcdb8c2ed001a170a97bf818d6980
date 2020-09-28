@@ -1,0 +1,389 @@
+package database;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import entita.Cliente;
+import entita.Insegna;
+import entita.Lavoratore;
+import entita.Ordine;
+import entita.Prodotto;
+import entita.Tappeto;
+
+public class MysqlInsert {
+	
+	static Query q = new Query();
+	
+	public static void aggiungiProdotto(Prodotto p) throws ClassNotFoundException, SQLException {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.NEW_PRODOTTO);) {
+			Class.forName(q.DRIVER);
+			
+			pstmt.setInt(1, Integer.valueOf(p.getCodiceProdotto()));
+			pstmt.setString(2, p.getDescrizione());
+			pstmt.setString(3, p.getTipologiaProdotto());
+			pstmt.setInt(4, Integer.valueOf(p.getCodiceLavoratore()));
+			
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	public static void aggiungiMaterialeTop(Prodotto p) throws ClassNotFoundException, SQLException {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.NEW_MATERIALETOP);) {
+			Class.forName(q.DRIVER);
+			
+			pstmt.setInt(1, Integer.valueOf(p.getCodiceProdotto()));
+			pstmt.setString(2, p.getTipologiaTop());
+			pstmt.setString(3, p.getColore());
+			pstmt.setString(4, p.getTipoLama());
+			pstmt.setFloat(5, Float.parseFloat(p.getCostoM2()));
+			
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	public static void aggiungiBase(Prodotto p) throws ClassNotFoundException, SQLException {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.NEW_BASE);) {
+			Class.forName(q.DRIVER);
+			
+			pstmt.setInt(1, Integer.valueOf(p.getCodiceProdotto()));
+			pstmt.setString(2, p.getTipologiaBase());
+			pstmt.setString(3, p.getTipoLama());
+			pstmt.setFloat(4, Float.parseFloat(p.getCostoM2()));
+			
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	public static void aggiungiAntinciampo(Prodotto p) throws ClassNotFoundException, SQLException {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.NEW_ANTINCIAMPO);) {
+			Class.forName(q.DRIVER);
+			
+			pstmt.setInt(1, Integer.valueOf(p.getCodiceProdotto()));
+			pstmt.setString(2, p.getTipologiaAntinciampo());
+			pstmt.setString(3, p.getTipoLama());
+			pstmt.setFloat(4, Float.parseFloat(p.getCostoM()));
+			
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	public static void aggiungiMaterialeTelaio(Prodotto p) throws ClassNotFoundException, SQLException {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.NEW_MATERIALETELAIO);) {
+			Class.forName(q.DRIVER);
+			
+			pstmt.setInt(1, Integer.valueOf(p.getCodiceProdotto()));
+			pstmt.setString(2, p.getTipologiaTelaio());
+			pstmt.setString(3, p.getTipoFresa());
+			pstmt.setFloat(4, Float.parseFloat(p.getCostoM2()));
+			
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	public static void aggiungiNeon(Prodotto p) throws ClassNotFoundException, SQLException {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.NEW_NEON);) {
+			Class.forName(q.DRIVER);
+			
+			pstmt.setInt(1, Integer.valueOf(p.getCodiceProdotto()));
+			pstmt.setFloat(2, Float.parseFloat(p.getCostoM()));
+			
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	public static void aggiungiLed(Prodotto p) throws ClassNotFoundException, SQLException {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.NEW_LED);) {
+			Class.forName(q.DRIVER);
+			
+			pstmt.setInt(1, Integer.valueOf(p.getCodiceProdotto()));
+			pstmt.setFloat(2, Float.parseFloat(p.getCostoUnitario()));
+			
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	public static void aggiungiLavoratore(Lavoratore l) throws SQLException, ClassNotFoundException {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.NEW_LAVORATORE);) {
+			Class.forName(q.DRIVER);
+			
+			pstmt.setInt(1, Integer.valueOf(l.getCodiceLavoratore()));
+			pstmt.setString(2, l.getCodiceFiscale());
+			pstmt.setFloat(3, Float.parseFloat(l.getStipendio()));
+			pstmt.setString(4, l.getNome());
+			pstmt.setString(5, l.getCognome());
+			pstmt.setString(6, l.getDataNascita());
+			pstmt.setString(7, l.getTipologiaLavoratore());
+			pstmt.setString(8, l.getPassword());
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	public static void aggiungiAmministratore(Lavoratore l) throws SQLException, ClassNotFoundException {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.NEW_AMMINISTRATORE);) {
+			Class.forName(q.DRIVER);
+			
+			pstmt.setInt(1, Integer.valueOf(l.getCodiceLavoratore()));
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	public static void aggiungiVenditore(Lavoratore l) throws SQLException, ClassNotFoundException {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.NEW_VENDITORE);) {
+			Class.forName(q.DRIVER);
+			
+			pstmt.setInt(1, Integer.valueOf(l.getCodiceLavoratore()));
+			pstmt.setInt(2, 0);
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	public static void aggiungiArtigiano(Lavoratore l) throws SQLException, ClassNotFoundException {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.NEW_ARTIGIANO);) {
+			Class.forName(q.DRIVER);
+			
+			pstmt.setInt(1, Integer.valueOf(l.getCodiceLavoratore()));
+			pstmt.setInt(2, 0);
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	public static void aggiungiOrdine(Ordine o) throws SQLException, ClassNotFoundException {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.NEW_ORDINE);) {
+			
+			Class.forName(q.DRIVER);
+			pstmt.setInt(1, Integer.valueOf(o.getCodiceOrdine()));
+			pstmt.setString(2, LocalDateTime.now().toString());
+			pstmt.setFloat(3, Float.parseFloat(o.getImportoOrdine()));
+			pstmt.setInt(4, Integer.valueOf(o.getCodiceCliente()));
+			pstmt.setInt(5, Integer.valueOf(o.getCodiceLavoratore()));
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	public static void aggiungiCliente(Cliente c) throws SQLException, ClassNotFoundException {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.NEW_CLIENTE);) {
+			
+			Class.forName(q.DRIVER);
+			pstmt.setInt(1, Integer.valueOf(c.getCodiceCliente()));
+			pstmt.setInt(2, Integer.valueOf(c.getNumeroOrdini()));
+			pstmt.setString(3, c.getNumeroTelefono());
+			pstmt.setString(4, c.getEmail());
+			pstmt.setInt(5, Integer.valueOf(c.getCodiceLavoratore()));
+			pstmt.setString(6, c.getTipologiaCliente());
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	public static void aggiungiPrivato(Cliente c) throws SQLException, ClassNotFoundException {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.NEW_PRIVATO);) {
+			
+			Class.forName(q.DRIVER);
+			pstmt.setString(1, c.getCodiceFiscale());
+			pstmt.setInt(2, Integer.valueOf(c.getCodiceCliente()));
+			pstmt.setString(3, c.getNome());
+			pstmt.setString(4, c.getCognome());
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	public static void aggiungiPartitaIva(Cliente c) throws SQLException, ClassNotFoundException {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.NEW_PARTITAIVA);) {
+			
+			Class.forName(q.DRIVER);
+			pstmt.setString(1, c.getPartitaIva());
+			pstmt.setInt(2, Integer.valueOf(c.getCodiceCliente()));
+			pstmt.setString(3, c.getNomeAzienda());
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	public static void aggiungiTappeto(Tappeto t) throws SQLException, ClassNotFoundException {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.NEW_TAPPETO);) {
+			
+			Class.forName(q.DRIVER);
+			pstmt.setInt(1, Integer.valueOf(t.getCodiceTappeto()));
+			pstmt.setString(2, t.getStato());
+			pstmt.setInt(3, Integer.valueOf(t.getQuantita()));
+			pstmt.setFloat(4, Float.parseFloat(t.getAltezza()));
+			pstmt.setFloat(5, Float.parseFloat(t.getLarghezza()));
+			pstmt.setString(6, t.getDataCompletamento());
+			pstmt.setFloat(7, Float.parseFloat(t.getPrezzo()));
+			pstmt.setInt(8, Integer.valueOf(t.getCodiceOrdine()));
+			pstmt.setInt(9, Integer.valueOf(t.getCodiceLavoratore()));
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	public static void aggiungiInsegna(Insegna i) throws SQLException, ClassNotFoundException {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.NEW_INSEGNA);) {
+			
+			Class.forName(q.DRIVER);
+			pstmt.setInt(1, Integer.valueOf(i.getCodiceInsegna()));
+			pstmt.setString(2, i.getStato());
+			pstmt.setInt(3, Integer.valueOf(i.getQuantita()));
+			pstmt.setFloat(4, Float.parseFloat(i.getAltezza()));
+			pstmt.setFloat(5, Float.parseFloat(i.getLarghezza()));
+			pstmt.setString(6, i.getDataCompletamento());
+			pstmt.setFloat(7, Float.parseFloat(i.getLunghezzaNeon()));
+			pstmt.setInt(8, Integer.valueOf(i.getNumeroLed()));
+			pstmt.setFloat(9, Float.parseFloat(i.getPrezzo()));
+			pstmt.setInt(10, Integer.valueOf(i.getCodiceOrdine()));
+			pstmt.setInt(11, Integer.valueOf(i.getCodiceLavoratore()));
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	public static void aggiungiMaterialeTopOrdinato(Prodotto p) {
+		try (Connection conn = DriverManager.getConnection(q.URL, q.USER, q.PASSWORD);
+				Statement stmt = conn.createStatement();
+				PreparedStatement pstmt = conn.prepareStatement(q.NEW_MATERIALETOPORDINATO);) {
+			
+			Class.forName(q.DRIVER);
+			pstmt.setInt(1, Integer.valueOf(p.getCodiceTappeto()));
+			pstmt.setFloat(2, Float.parseFloat(i.getAltezza()));
+			pstmt.setInt(3, Integer.valueOf(i.getQuantita()));
+			
+			pstmt.execute();
+
+		} catch (ClassNotFoundException | SQLException ex) {
+			Logger.getLogger(Mysql.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		
+	}
+
+	public static void aggiungiBaseOrdinata(Prodotto p) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void aggiungiAntinciampoOrdinato(Prodotto p) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void aggiungiMaterialeTelaioOrdinato(Prodotto p) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void aggiungiNeonOrdinato(Prodotto p) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void aggiungiLedOrdinato(Prodotto p) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	
+	
+}

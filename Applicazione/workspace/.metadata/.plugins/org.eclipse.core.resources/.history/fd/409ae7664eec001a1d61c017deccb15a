@@ -1,0 +1,278 @@
+package guiHome;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import entita.Cliente;
+import entita.Insegna;
+import entita.Lavoratore;
+import entita.Ordine;
+import entita.Prodotto;
+import entita.Tappeto;
+import guiDetails.FrameForDetails;
+import guiLogin.LoginView;
+import guiNew.FrameForNew;
+import utility.ColorView;
+import utility.DbHelper;
+
+
+
+public class PanelWorker extends JPanel {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String SX;
+	private String DX;
+	
+	JPanel grid;
+	GridBagConstraints gbc;
+	JLabel listaSx;
+	JLabel listaDx;
+	JScrollPane scrollSx;
+	JScrollPane scrollDx;
+	JButton newSx;
+	JButton newDx;
+	JButton logOut;
+	JLabel placeholder;
+
+	JPanel panelSx;
+	JPanel panelDx;
+	
+	ArrayList<JButton> listaBottoniSx = new ArrayList<>();
+	ArrayList<JButton> listaBottoniDx = new ArrayList<>();
+	
+	ArrayList<JLabel> listaStringheOrdini;
+	
+	ArrayList<Prodotto> listaProdotti;
+	ArrayList<Lavoratore> listaLavoratori;
+	ArrayList<Ordine> listaOrdini;
+	ArrayList<Cliente> listaClienti;
+	ArrayList<Tappeto> listaTappeti;
+	ArrayList<Insegna> listaInsegne;
+
+	public PanelWorker(int codiceDipendente, String ruolo, FrameForWorker padre) throws ClassNotFoundException, SQLException {
+		
+		sceltaRuolo(ruolo, padre);
+		inizializzaVariabili(ruolo);
+
+		this.setLayout(new BorderLayout());
+		this.add(grid);
+		
+		funzioniBottoni(padre);
+		dimensioni();
+		settaggioScroll(ruolo);
+		riempiGriglia(ruolo);
+		colori();
+	}
+
+	private void inizializzaVariabili(String ruolo) throws ClassNotFoundException, SQLException {
+		grid = new JPanel(new GridBagLayout());
+		gbc = new GridBagConstraints();
+		listaSx = new JLabel("Lista "+SX);
+		listaDx = new JLabel("Lista "+DX);
+		scrollSx = new JScrollPane();
+		scrollDx = new JScrollPane();
+		newSx = new JButton("nuovo "+SX);
+		newDx = new JButton("nuovo "+DX);
+		logOut = new JButton("< logOut");
+		placeholder = new JLabel("");
+		
+		listaStringheOrdini = new ArrayList<>();
+		for(Ordine o : DbHelper.getOrdini())listaStringheOrdini.add(new JLabel(o.getBottone().getText()));
+
+		panelSx = new JPanel(new GridLayout(0,1));
+		panelDx = new JPanel(new GridLayout(0,1));
+	}
+	
+	private void sceltaRuolo(String ruolo, FrameForWorker padre) throws ClassNotFoundException, SQLException {
+		switch(ruolo) {
+		case "amministratore":
+				SX="prodotto";
+				DX="lavoratore";
+				listaProdotti = DbHelper.getProdotti();
+				for(Prodotto p:listaProdotti){
+					listaBottoniSx.add(p.getBottone());
+					p.getBottone().addActionListener(e->{
+						Prodotto prodotto = listaProdotti.get(listaBottoniSx.indexOf(p.getBottone()));
+						new FrameForDetails(SX, prodotto, padre);
+					});
+					}
+				listaLavoratori = DbHelper.getLavoratori();
+				for(Lavoratore l:listaLavoratori){
+					listaBottoniDx.add(l.getBottone());
+					l.getBottone().addActionListener(e->{
+						Lavoratore lavoratore = listaLavoratori.get(listaBottoniDx.indexOf(l.getBottone()));
+						new FrameForDetails(DX, lavoratore, padre);
+					});
+					}
+				break;
+		case "venditore":
+				SX="ordine";
+				DX="cliente";
+				listaClienti = DbHelper.getClienti();
+				for(Cliente c:listaClienti){
+					listaBottoniDx.add(c.getBottone());
+					c.getBottone().addActionListener(e->{
+					Cliente cliente = listaClienti.get(listaBottoniDx.indexOf(c.getBottone()));
+					new FrameForDetails(DX, cliente, padre);
+					});
+					}
+				break;
+		case "artigiano":
+				SX="tappeto";
+				DX="insegna";
+				listaTappeti = DbHelper.getTappeti();
+				for(Tappeto t:listaTappeti){
+					listaBottoniSx.add(t.getBottone());
+					t.getBottone().addActionListener(e->{
+					Tappeto tappeto = listaTappeti.get(listaBottoniSx.indexOf(t.getBottone()));
+					new FrameForDetails(SX, tappeto, padre);
+					});
+					}
+				listaInsegne = DbHelper.getInsegne();
+				for(Insegna i:listaInsegne){
+					listaBottoniDx.add(i.getBottone());
+					i.getBottone().addActionListener(e->{
+					Insegna insegna = listaInsegne.get(listaBottoniDx.indexOf(i.getBottone()));
+					new FrameForDetails(DX, insegna, padre);
+					});
+					}
+				break;
+				
+		}
+	}
+	
+	private void funzioniBottoni(FrameForWorker padre) {
+		
+		logOut.addActionListener(e->{
+			padre.dispose();
+			new LoginView();
+		});
+		
+		newSx.addActionListener(e->{
+			try {
+				new FrameForNew(SX, padre);
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		newDx.addActionListener(e->{
+			try {
+				new FrameForNew(DX, padre);
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+	}
+	
+	private void settaggioScroll(String ruolo) {
+		for(JButton buttonDipendente:listaBottoniDx)panelDx.add(buttonDipendente);
+		if(ruolo != "venditore") {
+			for(JButton buttonProdotto:listaBottoniSx)panelSx.add(buttonProdotto);
+		} else {
+			for(JLabel s : listaStringheOrdini)panelSx.add(s);
+		}
+		
+		
+		
+		scrollSx.setPreferredSize(new Dimension(600,500));
+		scrollDx.setPreferredSize(new Dimension(600,500));
+		scrollSx.setViewportView(panelSx);
+		scrollDx.setViewportView(panelDx);
+		scrollSx.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollDx.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+	}
+	
+	private void riempiGriglia(String ruolo) {
+		gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        
+		grid.add(logOut, gbc);
+		gbc.gridy ++;
+		
+		
+		gbc.gridwidth = 2;
+		grid.add(listaSx, gbc);
+		gbc.gridwidth = 1;
+		gbc.gridx++;
+		grid.add(placeholder, gbc);
+		gbc.gridx++;
+		gbc.gridwidth = 2;
+		grid.add(listaDx, gbc);
+		gbc.gridx = 0;
+        gbc.gridy++;
+        
+        
+		grid.add(scrollSx, gbc);
+		gbc.gridx++;
+		gbc.gridwidth = 1;
+		grid.add(placeholder, gbc);
+		gbc.gridx++;
+		gbc.gridwidth = 2;
+		grid.add(scrollDx, gbc);
+		gbc.gridx = 0;
+        gbc.gridy++;
+        
+        if(ruolo != "artigiano") {
+        gbc.gridwidth = 2;
+        grid.add(newSx, gbc);
+        gbc.gridx++;
+        grid.add(placeholder, gbc);
+        gbc.gridx++;
+        grid.add(placeholder, gbc);
+        gbc.gridx++;
+        grid.add(newDx, gbc);
+        gbc.gridx++;
+        }
+	}
+	
+	private void colori() {
+		this.setBackground(ColorView.myGray());
+		grid.setBackground(ColorView.myGray());
+		
+		logOut.setBackground(ColorView.myOrange());
+		newSx.setBackground(ColorView.myOrange());
+		newDx.setBackground(ColorView.myOrange());
+		
+		listaSx.setForeground(Color.WHITE);
+		listaDx.setForeground(Color.WHITE);
+		logOut.setForeground(Color.WHITE);
+		newSx.setForeground(Color.WHITE);
+		newDx.setForeground(Color.WHITE);
+	}
+	
+	private void dimensioni() {
+		
+		listaSx.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+		listaDx.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+		
+		logOut.setFont(new Font("TimesRoman", Font.BOLD, 25));
+		newSx.setFont(new Font("TimesRoman", Font.BOLD, 25));
+		newDx.setFont(new Font("TimesRoman", Font.BOLD, 25));
+	}
+	
+}

@@ -1,0 +1,16 @@
+ackage guiDetails;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import entita.Ordine;
+
+public class PanelDetailsOrdine extends JPanel {
+
+	private Ordine ordine;
+	private  FrameForDetails padre;
+	PanelDetailsOrdine(Ordine ordine,  FrameForDetails padre){
+		this.padre = padre;
+		this.ordine = ordine;
+	}
+}

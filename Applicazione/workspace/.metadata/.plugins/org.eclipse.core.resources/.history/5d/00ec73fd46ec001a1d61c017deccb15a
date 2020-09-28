@@ -1,0 +1,25 @@
+package database;
+
+import entita.Cliente;
+import entita.Insegna;
+import entita.Lavoratore;
+import entita.Tappeto;
+
+public class MysqlUpdate {
+
+	public static void aggiornaLavoratore(Lavoratore l) {
+		
+	}
+
+	public static void aggiornaCliente(Cliente c) {
+		
+	}
+
+	public static void aggiornaInsegna(Insegna i, Boolean stato) {
+		
+	}
+
+	public static void aggiornaTappeto(Tappeto t, Boolean stato) {
+		
+	}
+}

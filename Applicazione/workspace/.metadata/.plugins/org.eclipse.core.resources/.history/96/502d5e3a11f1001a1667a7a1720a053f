@@ -1,0 +1,15 @@
+package start;
+
+import java.sql.SQLException;
+
+import guiLogin.LoginView;
+import utility.DbHelper;
+
+public class Launch {
+
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+			//new LoginView();
+		DbHelper.getTopOrdinato("1");
+	}
+
+}

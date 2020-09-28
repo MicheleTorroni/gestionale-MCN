@@ -1,0 +1,270 @@
+package guiNew;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import entita.Prodotto;
+import entita.Tappeto;
+import utility.ColorView;
+import utility.DbHelper;
+
+public class PanelNewTappeto extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	JLabel quantita = new JLabel("quantitá");
+	JTextField areaQuantita = new JTextField(15);
+	JLabel altezza = new JLabel("altezza");
+	JTextField areaAltezza = new JTextField(15);
+	JLabel larghezza = new JLabel("larghezza");
+	JTextField areaLarghezza = new JTextField(15);
+	JLabel prezzo = new JLabel("PREZZO FINALE");
+	JTextField areaPrezzo = new JTextField(15);
+
+	ArrayList<Prodotto> listaProdotti = new ArrayList<>();
+	ArrayList<Prodotto> listaTop = new ArrayList<>();
+	ArrayList<Prodotto> listaBase = new ArrayList<>();
+	ArrayList<Prodotto> listaAntinciampo = new ArrayList<>();
+
+	JLabel top = new JLabel("scelta top");
+	JComboBox<String> areaTop = new JComboBox<>();
+	JLabel prezzoTop = new JLabel("prezzo top");
+	JTextField areaPrezzoTop = new JTextField(15);
+	JLabel base = new JLabel("scelta base");
+	JComboBox<String> areaBase = new JComboBox<>();
+	JLabel prezzoBase = new JLabel("prezzo base");
+	JTextField areaPrezzoBase = new JTextField(15);
+	JLabel antinciampo = new JLabel("scelta antinciampo");
+	JComboBox<String> areaAntinciampo = new JComboBox<>();
+	JLabel prezzoAntinciampo = new JLabel("prezzo antinciampo");
+	JTextField areaPrezzoAntinciampo = new JTextField(15);
+
+	JButton salva = new JButton("salva");
+
+	JPanel grid = new JPanel(new GridBagLayout());
+	GridBagConstraints gbc = new GridBagConstraints();
+	JLabel placeholder = new JLabel(" ");
+
+	public PanelNewTappeto(FrameForNewTappetoInsegna padre) throws ClassNotFoundException, SQLException {
+
+		riempiGriglia();
+
+		inizializzazione();
+
+		this.setLayout(new BorderLayout());
+		this.add(grid);
+
+		funzioniBottoni(padre);
+		colori();
+		dimensioni();
+
+		this.setVisible(true);
+	}
+
+	private void inizializzazione() throws ClassNotFoundException, SQLException {
+
+		listaProdotti = DbHelper.getProdotti();
+
+		for (Prodotto p : listaProdotti) {
+			switch (p.getTipologiaProdotto()) {
+			case "materialetop":
+				listaTop.add(p);
+				break;
+			case "base":
+				listaBase.add(p);
+				break;
+			case "antinciampo":
+				listaAntinciampo.add(p);
+				break;
+			}
+		}
+
+		for (Prodotto t : listaTop) {
+			areaTop.addItem(t.getBottone().getText());
+		}
+
+		for (Prodotto b : listaBase) {
+			areaBase.addItem(b.getBottone().getText());
+		}
+
+		for (Prodotto a : listaAntinciampo) {
+			areaAntinciampo.addItem(a.getBottone().getText());
+		}
+
+	}
+
+	private void riempiGriglia() {
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.insets = new Insets(7, 7, 7, 7);
+
+		grid.add(quantita, gbc);
+		gbc.gridx++;
+		grid.add(areaQuantita, gbc);
+		gbc.gridx = 0;
+		gbc.gridy++;
+		grid.add(altezza, gbc);
+		gbc.gridx++;
+		grid.add(areaAltezza, gbc);
+		gbc.gridx = 0;
+		gbc.gridy++;
+		grid.add(larghezza, gbc);
+		gbc.gridx++;
+		grid.add(areaLarghezza, gbc);
+		gbc.gridx = 0;
+		gbc.gridy++;
+		grid.add(top, gbc);
+		gbc.gridx++;
+		grid.add(areaTop, gbc);
+		gbc.gridx = 0;
+		gbc.gridy++;
+		grid.add(prezzoTop, gbc);
+		gbc.gridx++;
+		grid.add(areaPrezzoTop, gbc);
+		gbc.gridx = 0;
+		gbc.gridy++;
+		grid.add(base, gbc);
+		gbc.gridx++;
+		grid.add(areaBase, gbc);
+		gbc.gridx = 0;
+		gbc.gridy++;
+		grid.add(prezzoBase, gbc);
+		gbc.gridx++;
+		grid.add(areaPrezzoBase, gbc);
+		gbc.gridx = 0;
+		gbc.gridy++;
+		grid.add(antinciampo, gbc);
+		gbc.gridx++;
+		grid.add(areaAntinciampo, gbc);
+		gbc.gridx = 0;
+		gbc.gridy++;
+		grid.add(prezzoAntinciampo, gbc);
+		gbc.gridx++;
+		grid.add(areaPrezzoAntinciampo, gbc);
+		gbc.gridx = 0;
+		gbc.gridy++;
+		gbc.gridy++;
+		grid.add(prezzo, gbc);
+		gbc.gridx++;
+		grid.add(areaPrezzo, gbc);
+		gbc.gridx = 0;
+		gbc.gridy++;
+
+		grid.add(placeholder, gbc);
+		gbc.gridy++;
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.gridwidth = 2;
+		grid.add(salva, gbc);
+	}
+
+	private void colori() {
+		this.setBackground(ColorView.myGray());
+		grid.setBackground(ColorView.myGray());
+		salva.setBackground(ColorView.myOrange());
+
+		quantita.setForeground(Color.WHITE);
+		altezza.setForeground(Color.WHITE);
+		larghezza.setForeground(Color.WHITE);
+		top.setForeground(Color.WHITE);
+		base.setForeground(Color.WHITE);
+		antinciampo.setForeground(Color.WHITE);
+		prezzo.setForeground(Color.WHITE);
+		prezzoTop.setForeground(Color.WHITE);
+		prezzoBase.setForeground(Color.WHITE);
+		prezzoAntinciampo.setForeground(Color.WHITE);
+		salva.setForeground(Color.WHITE);
+	}
+
+	private void dimensioni() {
+		this.setMinimumSize(new Dimension(500, 300));
+
+		quantita.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaQuantita.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		altezza.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaAltezza.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		larghezza.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaLarghezza.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		top.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaTop.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		prezzoTop.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaPrezzoTop.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		base.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaBase.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		prezzoBase.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaPrezzoBase.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		antinciampo.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaAntinciampo.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		prezzoAntinciampo.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaPrezzoAntinciampo.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		prezzo.setFont(new Font("TimesRoman", Font.BOLD, 20));
+		areaPrezzo.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+
+		salva.setFont(new Font("TimesRoman", Font.BOLD, 25));
+	}
+
+	private void funzioniBottoni(FrameForNewTappetoInsegna padre) {
+
+		salva.addActionListener(e -> {
+
+			String codice_tappeto = "0";
+			Tappeto t;
+			Prodotto top;
+			Prodotto base;
+			Prodotto antinciampo;
+
+			try {
+				codice_tappeto = DbHelper.maxTappeti();
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+			try {
+				t = new Tappeto(codice_tappeto, "DA INIZIARE", areaQuantita.getText(), areaAltezza.getText(),
+						areaLarghezza.getText(), "0000-01-01", areaPrezzo.getText(), DbHelper.maxOrdini(),
+						padre.getCreatore().getCodiceLavoratore());
+				top = new Prodotto(listaTop.get(areaTop.getSelectedIndex()).getCodiceProdotto(), "", "", "materialetop",
+						"", "", "", "", "", "", "", "", "", "");
+				top.setPrezzo(areaPrezzoTop.getText());
+				top.setCodiceTappeto(t.getCodiceTappeto());
+				base = new Prodotto(listaBase.get(areaBase.getSelectedIndex()).getCodiceProdotto(), "", "", "base", "",
+						"", "", "", "", "", "", "", "", "");
+				base.setPrezzo(areaPrezzoBase.getText());
+				base.setCodiceTappeto(t.getCodiceTappeto());
+				antinciampo = new Prodotto(listaAntinciampo.get(areaAntinciampo.getSelectedIndex()).getCodiceProdotto(),
+						"", "", "antinciampo", "", "", "", "", "", "", "", "", "", "");
+				antinciampo.setPrezzo(areaPrezzoAntinciampo.getText());
+				antinciampo.setCodiceTappeto(t.getCodiceTappeto());
+
+				padre.aggiungiProdottoOrdinato(top);
+				padre.aggiungiProdottoOrdinato(base);
+				padre.aggiungiProdottoOrdinato(antinciampo);
+				padre.aggiungiTappeto(t);
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+		});
+	};
+}

@@ -1,0 +1,15 @@
+package start;
+
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+
+import guiLogin.LoginView;
+
+public class Launch {
+	
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+		//new LoginView();
+		System.out.println(LocalDateTime.now().toString());
+	}
+
+}

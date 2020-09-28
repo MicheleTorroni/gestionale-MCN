@@ -1,0 +1,164 @@
+package guiLogin;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.sql.SQLException;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+import guiHome.FrameForWorker;
+import utility.ColorView;
+import utility.DbHelper;
+import utility.Images;
+
+public class LoginView extends JFrame implements KeyListener{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	JPanel panel = new JPanel();
+	JPanel grid = new JPanel(new GridBagLayout());
+	GridBagConstraints gbc = new GridBagConstraints();
+	JLabel codiceLavoratore = new JLabel("codice lavoratore");
+	JLabel password = new JLabel("password");
+	JTextField areaCodiceLavoratore = new JTextField(15);
+	JPasswordField areaPassword = new JPasswordField(15);
+	JButton login = new JButton("login");
+	JLabel placeholder = new JLabel(" ");
+
+	public LoginView() {
+		panel.setLayout(new BorderLayout());
+		panel.add(grid);
+		
+		areaCodiceLavoratore.addKeyListener(this);
+		areaPassword.addKeyListener(this);
+
+		funzioniBottoni();
+		riempiGriglia();
+		colori();
+		dimensioni();
+		Images.impostaIcona(this);
+
+		this.setLocationRelativeTo(null);
+		this.setTitle("MCN - Login");
+		this.add(panel);
+		this.setVisible(true);
+		this.pack();  
+	}
+
+	private void riempiGriglia() {
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.insets = new Insets(3, 3, 3, 3);
+
+		grid.add(codiceLavoratore, gbc);
+		gbc.gridx++;
+		grid.add(areaCodiceLavoratore, gbc);
+		gbc.gridx = 0;
+		gbc.gridy++;
+		grid.add(password, gbc);
+		gbc.gridx++;
+		grid.add(areaPassword, gbc);
+		gbc.gridx = 0;
+		gbc.gridy++;
+		grid.add(placeholder, gbc);
+		gbc.gridy++;
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.gridwidth = 2;
+		grid.add(login, gbc);
+	}
+
+	private void colori() {
+		panel.setBackground(ColorView.myGray());
+		grid.setBackground(ColorView.myGray());
+		login.setBackground(ColorView.myOrange());
+		codiceLavoratore.setForeground(Color.WHITE);
+		password.setForeground(Color.WHITE);
+		login.setForeground(Color.WHITE);
+	}
+
+	private void dimensioni() {
+		this.setMinimumSize(new Dimension(500, 300));
+		this.setResizable(false);
+
+		codiceLavoratore.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaCodiceLavoratore.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		password.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaPassword.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		login.setFont(new Font("TimesRoman", Font.BOLD, 25));
+	}
+
+	private void funzioniBottoni() {
+		login.addActionListener(e -> {
+			String codiceLavoratoreGet = areaCodiceLavoratore.getText();
+			@SuppressWarnings("deprecation")
+			String passwordGet = areaPassword.getText();
+			String ruolo = "errore";
+			try {
+				ruolo = DbHelper.login(codiceLavoratoreGet, passwordGet);
+
+				if (ruolo == "errore" || areaCodiceLavoratore.getText().equals("")) {
+					JPanel errore = new JPanel();
+					errore.setBackground(ColorView.myGray());
+					JOptionPane.showMessageDialog(errore, "codice lavoratore e/o password non corretti", "Error",
+							JOptionPane.ERROR_MESSAGE);
+
+				} else {
+
+					this.dispose();
+					try {
+						new FrameForWorker(ruolo, Integer.parseInt(codiceLavoratoreGet));
+					} catch (NumberFormatException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			} catch (ClassNotFoundException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			} catch (SQLException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+
+		});
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode()==10) {
+			login.doClick();
+		}
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		
+	}
+}

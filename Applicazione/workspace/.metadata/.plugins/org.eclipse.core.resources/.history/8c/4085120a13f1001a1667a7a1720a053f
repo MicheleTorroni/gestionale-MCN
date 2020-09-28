@@ -1,0 +1,196 @@
+package guiDetails;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.sql.SQLException;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import entita.Prodotto;
+import entita.Tappeto;
+import utility.ColorView;
+import utility.DbHelper;
+
+public class PanelDetailsTappeto extends JPanel {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	JLabel codiceTappeto = new JLabel("codice tappeto");
+	JLabel areaCodiceTappeto = new JLabel();
+	
+	
+	JLabel top = new JLabel("Top: ");
+	JLabel areaTop = new JLabel();
+	JLabel base = new JLabel("Base: ");
+	JLabel areaBase = new JLabel();
+	JLabel antinciampo = new JLabel("Antinciampo: ");
+	JLabel areaAntinciampo = new JLabel();
+	
+	
+	JLabel stato = new JLabel("stato");
+	JTextField areaStato = new JTextField();
+	JCheckBox areaCompletamento = new JCheckBox("COMPLETATO");
+
+	JButton salva = new JButton("salva");
+
+	JPanel grid = new JPanel(new GridBagLayout());
+	GridBagConstraints gbc = new GridBagConstraints();
+	JLabel placeholder = new JLabel(" ");
+
+	private Tappeto tappeto;
+
+	PanelDetailsTappeto(Tappeto tappeto, FrameForDetails padre) throws ClassNotFoundException, SQLException {
+		this.tappeto = tappeto;
+
+		inizializzazione(tappeto);
+		riempiGriglia();
+
+		this.setLayout(new BorderLayout());
+		this.add(grid);
+
+		funzioniBottoni(padre);
+		colori();
+		dimensioni();
+
+		this.setVisible(true);
+	}
+
+	private void inizializzazione(Tappeto t) throws ClassNotFoundException, SQLException {
+		Prodotto top = DbHelper.getTopOrdinato(t.getCodiceTappeto());
+		Prodotto base = DbHelper.getBaseOrdinata(t.getCodiceTappeto());
+		//Prodotto antinciampo = DbHelper.getAntinciampoOrdinato(t.getCodiceTappeto());
+		
+		areaCodiceTappeto.setText(t.getCodiceTappeto());
+		areaStato.setText(t.getStato());
+		
+		areaTop.setText(top.getBottone().getText());
+		areaBase.setText(base.getBottone().getText());
+		//areaAntinciampo.setText(antinciampo.getBottone().getText());
+	}
+
+	private void riempiGriglia() {
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.insets = new Insets(7, 7, 7, 7);
+
+		grid.add(codiceTappeto, gbc);
+		gbc.gridx++;
+		grid.add(areaCodiceTappeto, gbc);
+		gbc.gridx = 0;
+		gbc.gridy++;
+		
+		grid.add(top, gbc);
+		gbc.gridx++;
+		grid.add(areaTop, gbc);
+		gbc.gridx = 0;
+		gbc.gridy++;
+		grid.add(base, gbc);
+		gbc.gridx++;
+		grid.add(areaBase, gbc);
+		gbc.gridx = 0;
+		gbc.gridy++;
+		grid.add(antinciampo, gbc);
+		gbc.gridx++;
+		grid.add(areaAntinciampo, gbc);
+		gbc.gridx = 0;
+		gbc.gridy++;
+		
+		grid.add(stato, gbc);
+		gbc.gridx++;
+		grid.add(areaStato, gbc);
+		gbc.gridx = 0;
+		gbc.gridy++;
+		grid.add(placeholder, gbc);
+		gbc.gridy++;
+
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.gridwidth = 2;
+		grid.add(areaCompletamento, gbc);
+		gbc.gridx = 0;
+		gbc.gridy++;
+
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.gridwidth = 2;
+		grid.add(salva, gbc);
+	}
+
+	private void colori() {
+		this.setBackground(ColorView.myGray());
+		grid.setBackground(ColorView.myGray());
+		areaCompletamento.setBackground(ColorView.myGray());
+		salva.setBackground(ColorView.myOrange());
+
+		codiceTappeto.setForeground(Color.WHITE);
+		areaCodiceTappeto.setForeground(Color.WHITE);
+		top.setForeground(Color.WHITE);
+		areaTop.setForeground(Color.WHITE);
+		base.setForeground(Color.WHITE);
+		areaBase.setForeground(Color.WHITE);
+		antinciampo.setForeground(Color.WHITE);
+		areaAntinciampo.setForeground(Color.WHITE);
+		stato.setForeground(Color.WHITE);
+		salva.setForeground(Color.WHITE);
+		areaCompletamento.setForeground(Color.WHITE);
+	}
+
+	private void dimensioni() {
+		this.setMinimumSize(new Dimension(500, 300));
+
+		codiceTappeto.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaCodiceTappeto.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		top.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaTop.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		base.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaBase.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		antinciampo.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaAntinciampo.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		stato.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaStato.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		areaCompletamento.setFont(new Font("TimesRoman", Font.BOLD, 22));
+
+		salva.setFont(new Font("TimesRoman", Font.BOLD, 25));
+
+		areaStato.setPreferredSize(new Dimension(200, 30));
+	}
+
+	private void funzioniBottoni(FrameForDetails padre) {
+
+		salva.addActionListener(e -> {
+
+			tappeto.setStato(areaStato.getText());
+
+			DbHelper.aggiornaTappeto(tappeto, areaCompletamento.isSelected());
+			try {
+				padre.aggiornaCreatore();
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			if(areaCompletamento.isSelected()) {
+				try {
+					DbHelper.aggiornaIndiceArtigiano(padre.getCreatore().getCodiceLavoratore());
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			
+		});
+
+	};
+}

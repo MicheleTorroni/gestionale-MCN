@@ -1,0 +1,279 @@
+package guiDetails;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import entita.Prodotto;
+import guiNew.FrameForNew;
+import utility.ColorView;
+import utility.DbHelper;
+
+public class PanelDetailsProdotto extends JPanel {
+
+	private Prodotto prodotto;
+	private  FrameForDetails padre;
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	JPanel grid = new JPanel(new GridBagLayout());
+	GridBagConstraints gbc = new GridBagConstraints();
+	JLabel descrizione = new JLabel("descrizione");
+	JLabel tipo = new JLabel("tipo");
+	JTextField areaDescrizione = new JTextField(15);
+	JLabel areaTipo = new JLabel("da riempire");
+	JLabel placeholder = new JLabel(" ");
+	
+	//DA CAMBIARE
+		ArrayList<String> listaTipologieProdotti = DbHelper.getTipologieProdotti();
+		String[] array = listaTipologieProdotti.toArray(new String[listaTipologieProdotti.size()]);
+		//
+		
+		//-------------------------materialetop
+		JLabel tipologiaTop = new JLabel("tipologia top");
+		JTextField areaTipologiaTop = new JTextField(15);
+		JLabel colore = new JLabel("colore");
+		JTextField areaColore = new JTextField(15);
+		JLabel tipoLama = new JLabel("tipo lama");
+		JTextField areaTipoLama = new JTextField(15);
+		//costoM2
+		//-------------------------base
+		JLabel tipologiaBase = new JLabel("tipologia base");
+		JTextField areaTipologiaBase = new JTextField(15);
+		//tipoLama
+		//costoM2
+		//-------------------------antinciampo
+		JLabel tipologiaAntinciampo = new JLabel("tipologia antinciampo");
+		JTextField areaTipologiaAntinciampo = new JTextField(15);
+		//tipoLama
+		//costoM2
+		//-------------------------neon
+		JLabel costoM = new JLabel("costo m");
+		JTextField areaCostoM = new JTextField(15);
+		//-------------------------led
+		JLabel costoUnitario = new JLabel("costo unitario");
+		JTextField areaCostoUnitario = new JTextField(15);
+		//-------------------------materialetelaio
+		JLabel tipologiaTelaio = new JLabel("tipologia telaio");
+		JTextField areaTipologiaTelaio = new JTextField(15);
+		JLabel tipoFresa = new JLabel("tipo fresa");
+		JTextField areaTipoFresa = new JTextField(15);
+		JLabel costoM2 = new JLabel("costo mQ");
+		JTextField areaCostoM2 = new JTextField(15);
+		
+		
+		JButton salva = new JButton("salva");
+		JButton elimina = new JButton("elimina");
+	
+	public PanelDetailsProdotto(Prodotto prodotto,  FrameForDetails padre) {
+		this.padre = padre;
+		this.prodotto = prodotto;
+		
+		
+		this.setLayout(new BorderLayout());
+		this.add(grid);
+		
+		funzioniBottoni(padre);
+		riempiGriglia(prodotto.getTipologiaProdotto());
+		colori();
+		dimensioni();
+		
+	}
+	
+	private void riempiGriglia(String tipo) {
+		gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        
+        grid.add(descrizione, gbc);
+		gbc.gridx++;
+		grid.add(areaDescrizione, gbc);
+		gbc.gridx = 0;
+        gbc.gridy++;
+		grid.add(this.tipo, gbc);
+		gbc.gridx++;
+		grid.add(areaTipo, gbc);
+		gbc.gridx = 0;
+        gbc.gridy++;
+		
+        switch(tipo) {
+        case "materialetop":
+        	grid.add(tipologiaTop, gbc);
+    		gbc.gridx++;
+    		grid.add(areaTipologiaTop, gbc);
+    		gbc.gridx = 0;
+            gbc.gridy++;
+    		grid.add(colore, gbc);
+    		gbc.gridx++;
+    		grid.add(areaColore, gbc);
+    		gbc.gridx = 0;
+            gbc.gridy++;
+            grid.add(tipoLama, gbc);
+    		gbc.gridx++;
+    		grid.add(areaTipoLama, gbc);
+    		gbc.gridx = 0;
+    		gbc.gridy++;
+    		grid.add(costoM2, gbc);
+    		gbc.gridx++;
+    		grid.add(areaCostoM2, gbc);
+    		gbc.gridx = 0;
+    		gbc.gridy++;
+        	break;
+		case "base":
+			grid.add(tipologiaBase, gbc);
+    		gbc.gridx++;
+    		grid.add(areaTipologiaBase, gbc);;
+    		gbc.gridx = 0;
+            gbc.gridy++;
+            grid.add(tipoLama, gbc);
+    		gbc.gridx++;
+    		grid.add(areaTipoLama, gbc);
+    		gbc.gridx = 0;
+    		gbc.gridy++;
+    		grid.add(costoM2, gbc);
+    		gbc.gridx++;
+    		grid.add(areaCostoM2, gbc);
+    		gbc.gridx = 0;
+    		gbc.gridy++;    	
+		    break;
+		case "antinciampo":
+			grid.add(tipologiaAntinciampo, gbc);
+    		gbc.gridx++;
+    		grid.add(areaTipologiaAntinciampo, gbc);;
+    		gbc.gridx = 0;
+            gbc.gridy++;
+            grid.add(tipoLama, gbc);
+    		gbc.gridx++;
+    		grid.add(areaTipoLama, gbc);
+    		gbc.gridx = 0;
+    		gbc.gridy++;
+    		grid.add(costoM2, gbc);
+    		gbc.gridx++;
+    		grid.add(areaCostoM2, gbc);
+    		gbc.gridx = 0;
+    		gbc.gridy++;
+			break;
+		case "neon":
+			grid.add(costoM, gbc);
+    		gbc.gridx++;
+    		grid.add(areaCostoM, gbc);;
+    		gbc.gridx = 0;
+            gbc.gridy++;
+			break;
+		case "led":
+			grid.add(costoUnitario, gbc);
+    		gbc.gridx++;
+    		grid.add(areaCostoUnitario, gbc);;
+    		gbc.gridx = 0;
+            gbc.gridy++;
+			break;
+		case "materialetelaio":
+			grid.add(tipologiaTelaio, gbc);
+    		gbc.gridx++;
+    		grid.add(areaTipologiaTelaio, gbc);
+    		gbc.gridx = 0;
+            gbc.gridy++;
+    		grid.add(tipoFresa, gbc);
+    		gbc.gridx++;
+    		grid.add(areaTipoFresa, gbc);
+    		gbc.gridx = 0;
+    		gbc.gridy++;
+    		grid.add(costoM2, gbc);
+    		gbc.gridx++;
+    		grid.add(areaCostoM2, gbc);
+    		gbc.gridx = 0;
+    		gbc.gridy++;
+			break;
+		default: System.out.println("errore scelta tipo materiale");
+	
+        }
+
+		
+		
+		
+        grid.add(placeholder, gbc);
+        gbc.gridy++;
+		grid.add(elimina, gbc);
+		gbc.gridx++;
+		grid.add(salva, gbc);
+	}
+	
+	private void colori() {
+		this.setBackground(ColorView.myGray());
+		grid.setBackground(ColorView.myGray());
+		salva.setBackground(ColorView.myOrange());
+		elimina.setBackground(ColorView.myOrange());
+		
+		tipologiaTop.setForeground(Color.WHITE);
+		colore.setForeground(Color.WHITE);
+		tipoLama.setForeground(Color.WHITE);
+		tipologiaBase.setForeground(Color.WHITE);
+		tipologiaAntinciampo.setForeground(Color.WHITE);
+		costoM.setForeground(Color.WHITE);
+		costoUnitario.setForeground(Color.WHITE);
+		tipologiaTelaio.setForeground(Color.WHITE);
+		tipoFresa.setForeground(Color.WHITE);
+		costoM2.setForeground(Color.WHITE);
+		salva.setForeground(Color.WHITE);
+		elimina.setForeground(Color.WHITE);
+		
+		descrizione.setForeground(Color.WHITE);
+		tipo.setForeground(Color.WHITE);
+		areaTipo.setBackground(Color.WHITE);
+	}
+	
+	private void dimensioni() {
+		this.setMinimumSize(new Dimension(500, 300));
+
+		salva.setFont(new Font("TimesRoman", Font.BOLD, 25));
+		elimina.setFont(new Font("TimesRoman", Font.BOLD, 25));
+		
+		
+		descrizione.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaDescrizione.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		tipo.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaTipo.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		
+		tipologiaTop.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaTipologiaTop.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		colore.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaColore.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		tipoLama.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaTipoLama.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		tipologiaBase.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaTipologiaBase.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		costoM.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaCostoM.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		costoUnitario.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaCostoUnitario.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		tipologiaTelaio.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaTipologiaTelaio.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		tipoFresa.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaTipoFresa.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		costoM2.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaCostoM2.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		
+	}
+	
+	private void funzioniBottoni(FrameForDetails padre) {
+	
+			
+	
+	}
+	
+	
+}

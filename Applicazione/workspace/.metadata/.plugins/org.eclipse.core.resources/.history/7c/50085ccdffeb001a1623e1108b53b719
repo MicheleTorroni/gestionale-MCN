@@ -1,0 +1,329 @@
+package utility;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import database.Mysql;
+import entita.Cliente;
+import entita.Insegna;
+import entita.Lavoratore;
+import entita.Ordine;
+import entita.Prodotto;
+import entita.Tappeto;
+
+//DA CAMBIARE: TUTTI I RIEMPIMENTI
+public class DbHelper {
+
+	public static String login(String codiceLavoratore, String password) throws ClassNotFoundException, SQLException {
+		return Mysql.login(codiceLavoratore, password);
+	}
+
+	public static ArrayList<Prodotto> getProdotti() throws ClassNotFoundException, SQLException {
+		ArrayList<Prodotto> al = Mysql.getProdotti();
+		for (Prodotto p : al) {
+			String tipo = p.getTipologiaProdotto();
+			String codice = p.getCodiceProdotto();
+			switch (tipo) {
+			case "materialetop":
+				Prodotto tmp = Mysql.getMaterialeTop(codice);
+				p.setTipologiaTop(tmp.getTipologiaTop());
+				p.setColore(tmp.getColore());
+				p.setTipoLama(tmp.getTipoLama());
+				p.setCostoM2(tmp.getCostoM2());
+				break;
+			case "base":
+				Prodotto tmp1 = Mysql.getBase(codice);
+				p.setTipologiaBase(tmp1.getTipologiaBase());
+				p.setTipoLama(tmp1.getTipoLama());
+				p.setCostoM2(tmp1.getCostoM2());
+				break;
+			case "antinciampo":
+				Prodotto tmp2 = Mysql.getAntinciampo(codice);
+				p.setTipologiaAntinciampo(tmp2.getTipologiaAntinciampo());
+				p.setTipoLama(tmp2.getTipoLama());
+				p.setCostoM(tmp2.getCostoM());
+				break;
+			case "materialetelaio":
+				Prodotto tmp3 = Mysql.getMaterialeTelaio(codice);
+				p.setTipologiaTelaio(tmp3.getTipologiaTelaio());
+				p.setTipoFresa(tmp3.getTipoFresa());
+				p.setCostoM2(tmp3.getCostoM2());
+				break;
+			case "neon":
+				Prodotto tmp4 = Mysql.getNeon(codice);
+				p.setCostoM(tmp4.getCostoM());
+				break;
+			case "led":
+				Prodotto tmp5 = Mysql.getLed(codice);
+				p.setCostoUnitario(tmp5.getCostoUnitario());
+				break;
+			}
+		}
+
+		return al;
+	}
+
+	public static ArrayList<Lavoratore> getLavoratori() throws ClassNotFoundException, SQLException {
+		return Mysql.getLavoratori();
+	}
+
+	public static ArrayList<Ordine> getOrdini() throws ClassNotFoundException, SQLException {
+		return Mysql.getOrdini();
+	}
+
+	public static ArrayList<Cliente> getClienti() throws ClassNotFoundException, SQLException {
+		ArrayList<Cliente> al = Mysql.getClienti();
+		for (Cliente c : al) {
+			String tipo = c.getTipologiaCliente();
+			String codice = c.getCodiceCliente();
+			switch (tipo) {
+			case "privato":
+				Cliente tmp = Mysql.getPrivato(codice);
+				c.setNome(tmp.getNome());
+				c.setCognome(tmp.getCognome());
+				c.setCodiceFiscale(tmp.getCodiceFiscale());
+				break;
+			case "partitaiva":
+				Cliente tmp1 = Mysql.getPartitaIva(codice);
+				c.setPartitaIva(tmp1.getPartitaIva());
+				c.setNomeAzienda(tmp1.getNomeAzienda());
+				break;
+			}
+		}
+		return al;
+	}
+
+	public static ArrayList<Tappeto> getTappeti() throws ClassNotFoundException, SQLException {
+		return Mysql.getTappeti();
+	}
+
+	public static ArrayList<Insegna> getInsegne() throws ClassNotFoundException, SQLException {
+		return Mysql.getInsegne();
+	}
+
+	//______________________________________________NEW
+	
+	public static void aggiungiProdotto(Prodotto p) throws ClassNotFoundException, SQLException {
+		Mysql.aggiungiProdotto(p);
+	}
+	
+	public static void aggiungiMaterialeTop(Prodotto p) throws ClassNotFoundException, SQLException {
+		Mysql.aggiungiMaterialeTop(p);
+	}
+	
+	public static void aggiungiBase(Prodotto p) throws ClassNotFoundException, SQLException {
+		Mysql.aggiungiBase(p);
+	}
+	
+	public static void aggiungiAntinciampo(Prodotto p) throws ClassNotFoundException, SQLException {
+		Mysql.aggiungiAntinciampo(p);
+	}
+	
+	public static void aggiungiMaterialeTelaio(Prodotto p) throws ClassNotFoundException, SQLException {
+		Mysql.aggiungiMaterialeTelaio(p);
+	}
+	
+	public static void aggiungiNeon(Prodotto p) throws ClassNotFoundException, SQLException {
+		Mysql.aggiungiNeon(p);
+	}
+	
+	public static void aggiungiLed(Prodotto p) throws ClassNotFoundException, SQLException {
+		Mysql.aggiungiLed(p);
+	}
+
+	public static void aggiungiLavoratore(Lavoratore l) throws ClassNotFoundException, SQLException {
+		Mysql.aggiungiLavoratore(l);
+	}
+
+	public static void aggiungiAmministratore(Lavoratore l) throws ClassNotFoundException, SQLException {
+		Mysql.aggiungiAmministratore(l);
+	}
+
+	public static void aggiungiVenditore(Lavoratore l) throws ClassNotFoundException, SQLException {
+		Mysql.aggiungiVenditore(l);
+	}
+
+	public static void aggiungiArtigiano(Lavoratore l) throws ClassNotFoundException, SQLException {
+		Mysql.aggiungiArtigiano(l);
+	}
+
+	public static void aggiungiOrdine(Ordine o) throws ClassNotFoundException, SQLException {
+		Mysql.aggiungiOrdine(o);
+	}
+
+	public static void aggiungiCliente(Cliente c) throws ClassNotFoundException, SQLException {
+		Mysql.aggiungiCliente(c);
+	}
+	
+	public static void aggiungiPrivato(Cliente c) throws ClassNotFoundException, SQLException {
+		Mysql.aggiungiPrivato(c);
+	}
+	
+	public static void aggiungiPartitaIva(Cliente c) throws ClassNotFoundException, SQLException {
+		Mysql.aggiungiPartitaIva(c);
+	}
+
+	public static void aggiungiTappeto(Tappeto t) throws ClassNotFoundException, SQLException {
+		Mysql.aggiungiTappeto(t);
+	}
+
+	public static void aggiungiInsegna(Insegna i) throws ClassNotFoundException, SQLException {
+		Mysql.aggiungiInsegna(i);
+	}
+
+	//______________________________________________UPDATE
+	
+	public static void aggiornaProdotto(Prodotto p) {
+
+		// AGGIUNTA PRODOTTO
+
+		System.out.println("prodotto " + p.getCodiceProdotto() + " aggiornato con successo");
+	}
+
+	public static void aggiornaLavoratore(Lavoratore l) {
+
+		// AGGIUNTA LAVORATORE
+
+		System.out.println("prodotto " + l.getCodiceLavoratore() + " aggiornato con successo");
+	}
+
+	public static void aggiornaOrdine(Ordine o) {
+
+		// AGGIUNTA ORDINE
+		// RICORDA DI AGGIUNGERE ANCHE TAPPETI E INSEGNE
+
+		System.out.println("prodotto " + o.getCodiceOrdine() + " aggiornato con successo");
+	}
+
+	public static void aggiornaCliente(Cliente c) {
+
+		// AGGIUNTA CLIENTE
+
+		System.out.println("prodotto " + c.getCodiceCliente() + " aggiornato con successo");
+	}
+
+	public static void aggiornaInsegna(Insegna i) {
+
+		// AGGIUNTA LAVORATORE
+
+		System.out.println("prodotto " + i.getCodiceInsegna() + " aggiornato con successo");
+	}
+
+	public static void aggiornaTappeto(Tappeto t) {
+
+		// AGGIUNTA LAVORATORE
+
+		System.out.println("prodotto " + t.getCodiceTappeto() + " aggiornato con successo");
+	}
+
+	// DA NON CAMBIARE
+	public static ArrayList<String> getTipologieProdotti() {
+		ArrayList<String> listaTipologieProdotti = new ArrayList<>();
+		listaTipologieProdotti.add("materialetop");
+		listaTipologieProdotti.add("base");
+		listaTipologieProdotti.add("antinciampo");
+		listaTipologieProdotti.add("neon");
+		listaTipologieProdotti.add("led");
+		listaTipologieProdotti.add("materialetelaio");
+		return listaTipologieProdotti;
+	}
+
+	// DA NON CAMBIARE
+	public static ArrayList<String> getTipologieDipendenti() {
+		ArrayList<String> listaTipologieDipendenti = new ArrayList<>();
+		listaTipologieDipendenti.add("amministore");
+		listaTipologieDipendenti.add("venditore");
+		listaTipologieDipendenti.add("artigiano");
+		return listaTipologieDipendenti;
+	}
+
+	//______________________________________________MAX_INDEX
+	
+	public static String maxProdotti() throws ClassNotFoundException, SQLException {
+		int i = Integer.parseInt(Mysql.maxProdotti());
+		return Integer.toString(i+1);
+	}
+	
+	public static String maxLavoratori() throws ClassNotFoundException, SQLException {
+		int i = Integer.parseInt(Mysql.maxLavoratori());
+		return Integer.toString(i+1);
+	}
+	
+	public static String maxOrdini() throws ClassNotFoundException, SQLException {
+		int i = Integer.parseInt(Mysql.maxOrdini());
+		return Integer.toString(i+1);
+	}
+	
+	public static String maxClienti() throws ClassNotFoundException, SQLException {
+		int i = Integer.parseInt(Mysql.maxClienti());
+		return Integer.toString(i+1);
+	}
+	
+	public static String maxTappeti() throws ClassNotFoundException, SQLException {
+		int i = Integer.parseInt(Mysql.maxTappeti());
+		return Integer.toString(i+1);
+	}
+	
+	public static String maxInsegne() throws ClassNotFoundException, SQLException {
+		int i = Integer.parseInt(Mysql.maxInsegne());
+		return Integer.toString(i+1);
+	}
+	
+	//______________________________________________DELETE
+	
+	public static void eliminaProdotto(String codice) {
+		Mysql.eliminaProdotto(codice);
+	}
+	
+	public static void eliminaMaterialeTop(String codice) {
+		Mysql.eliminaMaterialeTop(codice);
+	}
+	
+	public static void eliminaBase(String codice) {
+		Mysql.eliminaBase(codice);
+	}
+	
+	public static void eliminaAntinciampo(String codice) {
+		Mysql.eliminaAntinciampo(codice);
+	}
+	
+	public static void eliminaMaterialeTelaio(String codice) {
+		Mysql.eliminaMaterialeTelaio(codice);
+	}
+	
+	public static void eliminaNeon(String codice) {
+		Mysql.eliminaNeon(codice);
+	}
+	
+	public static void eliminaLed(String codice) {
+		Mysql.eliminaLed(codice);
+	}
+
+	public static void eliminaLavoratore(String codice) {
+		Mysql.eliminaLavoratore(codice);
+	}
+	
+	public static void eliminaAmministratore(String codice) {
+		Mysql.eliminaLavoratore(codice);
+	}
+	
+	public static void eliminaVenditore(String codice) {
+		Mysql.eliminaLavoratore(codice);
+	}
+	
+	public static void eliminaArtigiano(String codice) {
+		Mysql.eliminaLavoratore(codice);
+	}
+
+	public static void eliminaCliente(String codice) {
+		Mysql.eliminaCliente(codice);
+	}
+	
+	public static void eliminaPrivato(String codice) {
+		Mysql.eliminaPrivato(codice);
+	}
+	
+	public static void eliminaPartitaIva(String codice) {
+		Mysql.eliminaPartitaIva(codice);
+	}
+}

@@ -1,0 +1,70 @@
+package guiNew;
+
+import java.awt.Dimension;
+import java.sql.SQLException;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import entita.Insegna;
+import entita.Tappeto;
+import utility.Images;
+
+public class FrameForNewTappetoInsegna extends JFrame {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	JPanel panelTappeto;
+	JPanel panelInsegna = new PanelNewInsegna(this);
+	
+	PanelNewOrdine creatore;
+	
+	public FrameForNewTappetoInsegna(String tabella, PanelNewOrdine creatore) throws ClassNotFoundException, SQLException {
+		
+		panelTappeto = new PanelNewTappeto(this);
+		
+		sceltaTabella(tabella);
+		this.creatore = creatore;
+		dimensioni();
+
+		Images.impostaIcona(this);
+		this.setLocationRelativeTo(null);
+		this.setTitle("MCN - new "+tabella);
+		this.setVisible(true);
+		this.pack();
+	}
+	
+	
+	private void sceltaTabella(String tabella) {
+		switch(tabella) {
+			case "tappeto":
+				this.add(panelTappeto);
+				break;
+			case "insegna":
+				this.add(panelInsegna);
+				break;
+			default : System.out.println("errore scelta new tabella");
+		}
+	}
+	
+	private void dimensioni() {
+		this.setMinimumSize(new Dimension(800, 400));
+		this.setResizable(false);
+	}
+	
+	public PanelNewOrdine getCreatore() {
+		return this.creatore;
+	}
+	
+	public void aggiungiTappeto(Tappeto t) {
+		creatore.aggiungiTappeto(t);
+		this.dispose();
+	}
+	
+	public void aggiungiInsegna(Insegna i) {
+		creatore.aggiungiInsegna(i);
+		this.dispose();
+	}
+}

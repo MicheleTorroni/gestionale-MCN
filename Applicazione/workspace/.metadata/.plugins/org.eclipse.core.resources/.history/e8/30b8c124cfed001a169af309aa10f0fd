@@ -1,0 +1,155 @@
+package guiDetails;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.sql.SQLException;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import entita.Cliente;
+import utility.ColorView;
+import utility.DbHelper;
+
+public class PanelDetailsCliente extends JPanel {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private Cliente cliente;
+
+	JLabel numeroTelefono = new JLabel("numero di telefono");
+	JTextField areaNumeroTelefono = new JTextField(15);
+	JLabel email = new JLabel("email");
+	JTextField areaEmail = new JTextField(15);
+
+	JLabel tipologia = new JLabel("tipologia");
+	JLabel areaTipologia = new JLabel("tipologia");
+	// -------------------------privato
+	JLabel codiceFiscale = new JLabel("codice fiscale");
+	JLabel areaCodiceFiscale = new JLabel();
+	JLabel nome = new JLabel("nome");
+	JLabel areaNome = new JLabel();
+	JLabel cognome = new JLabel("cognome");
+	JLabel areaCognome = new JLabel();
+	// -------------------------partitaIva
+	JLabel partitaIva = new JLabel("partita iva");
+	JLabel areaPartitaIva = new JLabel();
+	JLabel nomeAzienda = new JLabel("nome societá");
+	JLabel areaNomeAzienda = new JLabel();
+
+	JButton salva = new JButton("salva");
+	JButton elimina = new JButton("elimina");
+
+	JPanel grid = new JPanel(new GridBagLayout());
+	GridBagConstraints gbc = new GridBagConstraints();
+	JLabel placeholder = new JLabel(" ");
+
+	PanelDetailsCliente(Cliente cliente, FrameForDetails padre) {
+		this.cliente = cliente;
+
+		riempiGriglia(cliente.getTipologiaCliente());
+		inizializzazione(cliente);
+
+		this.setLayout(new BorderLayout());
+		this.add(grid);
+
+		funzioniBottoni(padre);
+		colori();
+		dimensioni();
+
+		this.setVisible(true);
+	}
+	private void dimensioni() {
+		this.setMinimumSize(new Dimension(500, 300));
+
+		codiceFiscale.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaCodiceFiscale.setFont(new Font("TimesRoman", Font.BOLD, 20));
+		nome.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaNome.setFont(new Font("TimesRoman", Font.BOLD, 20));
+		cognome.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaCognome.setFont(new Font("TimesRoman", Font.BOLD, 20));
+		partitaIva.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaPartitaIva.setFont(new Font("TimesRoman", Font.BOLD, 20));
+		nomeAzienda.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaNomeAzienda.setFont(new Font("TimesRoman", Font.BOLD, 20));
+		numeroTelefono.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaNumeroTelefono.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		email.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaEmail.setFont(new Font("TimesRoman", Font.ITALIC, 20));
+		tipologia.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		areaTipologia.setFont(new Font("TimesRoman", Font.PLAIN, 24));
+
+		salva.setFont(new Font("TimesRoman", Font.BOLD, 25));
+		elimina.setFont(new Font("TimesRoman", Font.BOLD, 25));
+	}
+
+	private void funzioniBottoni(FrameForDetails padre) {
+
+		salva.addActionListener(e -> {
+
+			cliente.setNumeroTelefono(areaNumeroTelefono.getText());
+			cliente.setEmail(areaEmail.getText());
+
+			DbHelper.aggiornaCliente(cliente);
+			try {
+				padre.aggiornaCreatore();
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+
+		elimina.addActionListener(e -> {
+			String codice = cliente.getCodiceCliente();
+			String tipologia = cliente.getTipologiaCliente();
+			try {
+				DbHelper.eliminaCliente(codice);
+			} catch (ClassNotFoundException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+
+			switch (tipologia) {
+
+			case "privato":
+				try {
+					DbHelper.eliminaPrivato(codice);
+				} catch (ClassNotFoundException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+				break;
+			case "partitaiva":
+				try {
+					DbHelper.eliminaPartitaIva(codice);
+				} catch (ClassNotFoundException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+				break;
+			}
+
+			try {
+				padre.aggiornaCreatore();
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+	}
+}
